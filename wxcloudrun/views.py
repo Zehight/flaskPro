@@ -1,20 +1,20 @@
 from datetime import datetime
 from flask import render_template, request
-from run import app
+from wxcloudrun import demo
 from wxcloudrun.dao import delete_counterbyid, query_counterbyid, insert_counter, update_counterbyid
 from wxcloudrun.model import Counters
 from wxcloudrun.response import make_succ_empty_response, make_succ_response, make_err_response
 
 
-@app.route('/')
+@demo.route('/')
 def index():
     """
     :return: 返回index页面
     """
-    return render_template('index.html')
+    return 'ok'
 
 
-@app.route('/api/count', methods=['POST'])
+@demo.route('/count', methods=['POST'])
 def count():
     """
     :return:计数结果/清除结果
@@ -57,7 +57,7 @@ def count():
         return make_err_response('action参数错误')
 
 
-@app.route('/api/count', methods=['GET'])
+@demo.route('/count', methods=['GET'])
 def get_count():
     """
     :return: 计数的值
