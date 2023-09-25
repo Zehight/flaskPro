@@ -1,13 +1,13 @@
 # 创建应用实例
 import sys
 import pymysql
-from flask import Flask
+from app import app
 from flask_sqlalchemy import SQLAlchemy
 import config
 
 
 pymysql.install_as_MySQLdb()
-app = Flask(__name__, instance_relative_config=True)
+
 app.config['DEBUG'] = config.DEBUG
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -18,9 +18,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/flask_demo'.format(con
 # 初始化DB操作对象
 db = SQLAlchemy(app)
 
-# 注册蓝图
-from wxcloudrun import demo
-app.register_blueprint(demo)
+
 
 # 加载配置
 app.config.from_object('config')
