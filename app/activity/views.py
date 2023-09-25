@@ -3,7 +3,7 @@ from app.activity import activity
 from app.activity.response import make_succ_empty_response, make_succ_response, make_err_response
 
 
-@activity.route('/getInfo')
+@activity.route('/getInfo', methods=['POST'])
 def getInfo():
     #获取请求体
     params = request.get_json()
