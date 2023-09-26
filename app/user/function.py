@@ -6,10 +6,9 @@ from service.models import User
 # 新增
 def create_func(**kwargs):
     try:
-        user = User.create(**kwargs).to_dict()
-        return "操作成功",user['id']
+        user = User.create(**kwargs)
+        return "操作成功",user.id
     except IntegrityError as e:
-        print(e)
         if 'Duplicate entry' in str(e):
             return "操作失败","数据信息重复"
         else:
@@ -31,9 +30,10 @@ def delete_func(**kwargs):
 # 更新
 def update_func(**kwargs):
     user = User.get(id=kwargs['id'])
+    print(user.to_dict())
     if user:
         try:
-            User.update(**kwargs)
+            user.update(**kwargs)
             return "操作成功","数据修改成功"
         except IntegrityError as e:
             print(e)
@@ -62,5 +62,5 @@ def getlist_func(pageDto=None, keyword=''):
         return 'error'
     page = pageDto['page']
     rows = pageDto['rows']
-    result = User.search(keyword, page, rows)
+    result = User.search(keyword, page=page, rows=rows)
     return "操作成功",result

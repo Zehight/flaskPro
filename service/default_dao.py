@@ -1,12 +1,30 @@
 from run import db
 from sqlalchemy import or_
+from datetime import datetime
 
 class CRUDMixin:
     def __init__(self):
         self.__mapper__ = None
 
+    # def to_dict(self):
+    #     def format_datetime(dt):
+    #         return dt.strftime('%Y-%m-%d %H:%M:%S')
+    #     return {
+    #         prop: format_datetime(getattr(self, prop)) if isinstance(getattr(self, prop), datetime) else getattr(self,
+    #                                                                                                              prop)
+    #
+    #         for prop in vars(self) if
+    #         not prop.startswith('_') and not callable(getattr(self, prop)) and not isinstance(getattr(self, prop),
+    #                                                                                           db.Model)}
+
     def to_dict(self):
-        return {key: getattr(self, key) for key in self.__mapper__.c.keys()}
+        result = {}
+        for key in self.__mapper__.c.keys():
+            value = getattr(self, key)
+            if isinstance(value, datetime):
+                value = value.strftime('%Y-%m-%d %H:%M:%S')
+            result[key] = value
+        return result
 
     @classmethod
     def create(cls, **kwargs):
@@ -64,10 +82,15 @@ class CRUDMixin:
         return self
 
     @classmethod
-    def search(cls, keyword, page=1, rows=10):
-        query = cls.query.filter(or_(*[getattr(cls, field).ilike(f'%{keyword}%') for field in cls.search_fields]))
+    def search(cls, keyword = '',father_id=None, page=0, rows=10):
+        query = cls.query
+        if hasattr(cls, 'search_fields') and keyword:
+            query = query.filter(or_(*[getattr(cls, field).ilike(f'%{keyword}%') for field in cls.search_fields]))
+        if hasattr(cls, 'father_field') and hasattr(cls, 'father_id'):
+            query = query.filter(getattr(cls, cls.father_field) == father_id)
         total = query.count()
         pagination = query.paginate(page, rows, error_out=False)
+
         items = [item.to_dict() for item in pagination.items]
         return {
             'page': page,

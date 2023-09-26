@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from run import db
 from service.default_dao import CRUDMixin
 
@@ -11,19 +13,15 @@ class User(db.Model, CRUDMixin):
 
 class Activity(db.Model,CRUDMixin):
     __tablename__ = 'activity'
-    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.BigInteger, nullable=False)
-    BlogStatus = db.Column(db.String(1), nullable=False)
-    Top = db.Column(db.String(1), nullable=True)
-    Excellent = db.Column(db.String(1), nullable=True)
-    TemplateId = db.Column(db.BigInteger, nullable=False)
-    Theme = db.Column(db.String(100), nullable=False)
-    Keyword = db.Column(db.String(10), nullable=True)
-    Content = db.Column(db.String(20000), nullable=False)
-    LikeNum = db.Column(db.BigInteger, nullable=True)
-    ViewNum = db.Column(db.BigInteger, nullable=True)
-    PublishDate = db.Column(db.Date, nullable=False, default=date.today())
-    ModifyDate = db.Column(db.Date, nullable=False, default=date.today())
+    id = db.Column(db.Integer, primary_key=True)
+    status = db.Column(db.String(1), nullable=False,default="0") # 删除为1，不删除为0
+    top = db.Column(db.String(1), nullable=True,default="0") # 置顶
+    excellent = db.Column(db.String(1), nullable=True,default="0") # 加精
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.String(16000), nullable=False)
+    create_time = db.Column(db.DateTime, nullable=False, default=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    create_by = db.Column(db.Integer, nullable=False)
+    search_fields = ['title', 'content','create_by']
 
 
 db.create_all()
