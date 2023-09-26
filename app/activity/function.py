@@ -1,12 +1,12 @@
 from sqlalchemy.exc import IntegrityError
 
-from service.models import User
+from service.models import Activity
 
 
 # 新增
 def create_func(**kwargs):
     try:
-        user = User.create(**kwargs).to_dict()
+        user = Activity.create(**kwargs).to_dict()
         return "操作成功",user['id']
     except IntegrityError as e:
         print(e)
@@ -20,7 +20,7 @@ def create_func(**kwargs):
 def delete_func(**kwargs):
     if 'id' not in kwargs:
         return "操作失败",'数据信息错误'
-    user = User.get(id=kwargs['id'])
+    user = Activity.get(id=kwargs['id'])
     if user:
         user.delete()
         return "操作成功",'数据删除成功'
@@ -30,10 +30,10 @@ def delete_func(**kwargs):
 
 # 更新
 def update_func(**kwargs):
-    user = User.get(id=kwargs['id'])
+    user = Activity.get(id=kwargs['id'])
     if user:
         try:
-            User.update(**kwargs)
+            Activity.update(**kwargs)
             return "操作成功","数据修改成功"
         except IntegrityError as e:
             print(e)
@@ -49,7 +49,7 @@ def update_func(**kwargs):
 def getinfo_func(**kwargs):
     if 'id' not in kwargs:
         return "操作失败",'参数错误'
-    user = User.get(id=kwargs['id'])
+    user = Activity.get(id=kwargs['id'])
     if user:
         return "操作成功",user.to_dict()
     else:
@@ -62,5 +62,5 @@ def getlist_func(pageDto=None, keyword=''):
         return 'error'
     page = pageDto['page']
     rows = pageDto['rows']
-    result = User.search(keyword, page, rows)
+    result = Activity.search(keyword, page, rows)
     return "操作成功",result
