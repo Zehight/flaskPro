@@ -1,48 +1,43 @@
 import json
 
 from flask import request
-import app.user.function as UserFuncs
-from app.user import user
+import app.dept.function as DeptFuncs
+from app.dept import dept
 import service.reponse as MyResponse
 from service.login import token_required
 
 
-@user.route('/add',methods=['POST'])
+@dept.route('/add',methods=['POST'])
+@token_required
 def add():
     requestData = json.loads(request.data)
-    msg,data = UserFuncs.create_func(**requestData)
+    msg,data = DeptFuncs.create_func(**requestData)
     return MyResponse.make_succ_response(msg=msg,data = data)
 
-@user.route('/update',methods=['POST'])
+@dept.route('/update',methods=['POST'])
 @token_required
 def update():
     requestData = json.loads(request.data)
-    msg,data = UserFuncs.update_func(**requestData)
+    msg,data = DeptFuncs.update_func(**requestData)
     return MyResponse.make_succ_response(msg=msg,data = data)
 
-@user.route('/delete',methods=['POST'])
+@dept.route('/delete',methods=['POST'])
 @token_required
 def delete():
     requestData = json.loads(request.data)
-    msg,data = UserFuncs.delete_func(**requestData)
+    msg,data = DeptFuncs.delete_func(**requestData)
     return MyResponse.make_succ_response(msg=msg,data = data)
 
-@user.route('/info',methods=['POST'])
+@dept.route('/info',methods=['POST'])
 @token_required
 def info():
     requestData = json.loads(request.data)
-    msg,data = UserFuncs.getinfo_func(**requestData)
+    msg,data = DeptFuncs.getinfo_func(**requestData)
     return MyResponse.make_succ_response(msg=msg,data = data)
 
-@user.route('/list',methods=['POST'])
+@dept.route('/list',methods=['POST'])
 @token_required
 def list():
     requestData = json.loads(request.data)
-    msg,data = UserFuncs.getlist_func(**requestData)
-    return MyResponse.make_succ_response(msg=msg,data = data)
-
-@user.route('/login',methods=['POST'])
-def login():
-    requestData = json.loads(request.data)
-    msg,data = UserFuncs.login_func(**requestData)
+    msg,data = DeptFuncs.getlist_func(**requestData)
     return MyResponse.make_succ_response(msg=msg,data = data)

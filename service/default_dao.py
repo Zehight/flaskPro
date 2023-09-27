@@ -82,11 +82,15 @@ class CRUDMixin:
         return self
 
     @classmethod
-    def search(cls, keyword = '',father_id=None, page=0, rows=10):
+    def search(cls, keyword = '',page=1, rows=10,**kwargs):
         query = cls.query
+        father_id = None
+        for item in list(kwargs.keys()):
+            if item == cls.father_field:
+                father_id = kwargs[item]
         if hasattr(cls, 'search_fields') and keyword:
             query = query.filter(or_(*[getattr(cls, field).ilike(f'%{keyword}%') for field in cls.search_fields]))
-        if hasattr(cls, 'father_field') and hasattr(cls, 'father_id'):
+        if hasattr(cls, 'father_field') and father_id:
             query = query.filter(getattr(cls, cls.father_field) == father_id)
         total = query.count()
         pagination = query.paginate(page, rows, error_out=False)
