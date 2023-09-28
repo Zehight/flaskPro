@@ -36,7 +36,6 @@ def info():
     return MyResponse.make_succ_response(msg=msg,data = data)
 
 @dept.route('/list',methods=['POST'])
-@token_required
 def list():
     requestData = json.loads(request.data)
     msg,data = DeptFuncs.getlist_func(**requestData)
