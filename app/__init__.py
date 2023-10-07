@@ -12,3 +12,8 @@ app.register_blueprint(activity)
 app.register_blueprint(user)
 app.register_blueprint(dept)
 app.register_blueprint(file)
+
+
+@app.route('/health/check', methods=['GET'])
+def check():
+    return 'successful'
