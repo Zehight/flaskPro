@@ -5,8 +5,8 @@ DEBUG = True
 
 cpy_dev_config={
     'username':'root',
-    'password':'Foriinrnge10+-;',
-    'db_address':'localhost:3306'
+    'password':'Mccbts_Liubin123',
+    'db_address':'192.168.51.24:3306'
 }
 
 home_dev_config={
@@ -15,7 +15,7 @@ home_dev_config={
     'db_address':'localhost:3306'
 }
 
-now_config = home_dev_config
+now_config = cpy_dev_config
 
 
 # 读取数据库环境变量
