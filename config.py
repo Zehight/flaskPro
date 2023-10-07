@@ -15,7 +15,14 @@ home_dev_config={
     'db_address':'localhost:3306'
 }
 
-now_config = cpy_dev_config
+line_dev_config={
+    'username':'root',
+    'password':'Foriinrange10+-;',
+    'db_address':'43.156.126.106:3306'
+}
+
+
+now_config = line_dev_config
 
 
 # 读取数据库环境变量
