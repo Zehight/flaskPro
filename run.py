@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # 设定数据库链接
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/flask_demo'.format(config.username, config.password,
-                                                                             config.db_address)
+                                                                              config.db_address)
 
 # 初始化DB操作对象
 db = SQLAlchemy(app)
@@ -23,5 +23,7 @@ app.config.from_object('config')
 
 # 启动Flask Web服务
 
-app.run(host=sys.argv[1], port=sys.argv[2])
-# app.run(host='localhost', port=5000)
+
+if __name__ == '__main__':
+    app.run(host=sys.argv[1], port=sys.argv[2])
+    # app.run(host='localhost', port=5000)
