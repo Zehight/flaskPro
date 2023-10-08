@@ -1,7 +1,23 @@
 import os
+import sys
+from io import BytesIO
 from flask import current_app
 from service.models import File
 from PIL import Image
+import config
+
+
+from qcloud_cos import CosConfig
+from qcloud_cos import CosS3Client
+
+
+cos_config = CosConfig(Region='ap-shanghai', SecretId=config.SecretId, SecretKey=config.SecretKey, Token=None)
+client = CosS3Client(cos_config)
+
+response = client.list_buckets()
+print(response)
+
+
 
 
 
@@ -10,17 +26,29 @@ from PIL import Image
 def create_func(real_file, **kwargs):
     file_name = real_file.filename
     file = File.create(file_name=file_name, **kwargs)
+    file_save_name = file.id + '_' + file_name
+    real_file.save(file_save_name)
+    client.put_object(
+        Bucket='img-1259115987',
+        Body=real_file.read(),
+        Key=file_save_name,
+        EnableMD5=False
+    )
 
-    file_path = os.path.join(os.path.dirname(current_app.root_path), 'files', file.id + '_' + file_name)
-    # file_path = file_folder + file.id + '_' + file_name
-    print(file_path)
-    real_file.save(file_path)
     small_file = File.create(file_name=file_name, small_type='1', **kwargs)
     file.update(small_id=small_file.id)
-    small_file_path = os.path.join(os.path.dirname(current_app.root_path), 'files', small_file.id + '_' + file_name)
-    # small_file_path = file_folder + small_file.id + '_' + file_name
-    with Image.open(file_path) as small_real_file:
-        small_real_file.save(small_file_path, optimize=True, quality=20)
+    small_file_save_name = small_file.id + '_' + file_name
+    small_real_file = Image.open(file_save_name)
+    small_real_file.save(small_file_save_name, optimize=True, quality=20)
+    client.put_object_from_local_file(
+        Bucket='small-img-1259115987',
+        LocalFilePath=small_file_save_name,
+        Key=small_file_save_name
+    )
+
+    os.remove(file_save_name)
+    os.remove(small_file_save_name)
+
     return "操作成功", '文件上传成功'
 
 

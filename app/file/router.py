@@ -1,6 +1,6 @@
 import json
 import os
-from flask import request, send_from_directory, current_app
+from flask import request, send_from_directory, current_app,Response
 import app.file.function as FileFuncs
 from app.file import file
 import service.reponse as MyResponse
@@ -36,6 +36,23 @@ def list():
 @file.route('/preview', methods=['GET'])
 def preview():
     id = request.args.get('id')
+    size = request.args.get('size','')
     msg, data = FileFuncs.getinfo_func(id=id)
+    print(data)
     fileName = data['file_name']
-    return send_from_directory(os.path.join(os.path.dirname(current_app.root_path), 'files'), id + '_' + fileName)
+    small_id = data['small_id']
+    key = id + '_' + fileName
+    small_key = small_id + '_' + fileName
+    if(size == 'small'):
+        response = FileFuncs.client.get_object(
+            Bucket='small-img-1259115987',
+            Key=small_key,
+        )
+    else:
+        response = FileFuncs.client.get_object(
+            Bucket='img-1259115987',
+            Key=key,
+        )
+    fp = response['Body'].get_raw_stream()
+    return Response(fp.read(),content_type='image/jpeg')
+    # return send_from_directory(os.path.join(os.path.dirname(current_app.root_path), 'files'), id + '_' + fileName)
