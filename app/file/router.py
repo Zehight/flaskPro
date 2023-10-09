@@ -11,6 +11,7 @@ from service.login import token_required
 @token_required
 def add():
     file = request.files['file']
+    print(file.content_length)
     requestData = request.form.to_dict()
     create_by = request.token_info['id']
     msg, data = FileFuncs.create_func(real_file=file, create_by=create_by, **requestData)

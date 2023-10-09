@@ -24,11 +24,9 @@ print(response)
 
 # 新增
 def create_func(real_file, **kwargs):
-    print(real_file.content_length)
     file_name = real_file.filename
     file = File.create(file_name=file_name, **kwargs)
     file_save_name = file.id + '_' + file_name
-    real_file.save(file_save_name)
     client.put_object(
         Bucket='img-1259115987',
         Body=real_file.read(),
@@ -39,17 +37,14 @@ def create_func(real_file, **kwargs):
     small_file = File.create(file_name=file_name, small_type='1', **kwargs)
     file.update(small_id=small_file.id)
     small_file_save_name = small_file.id + '_' + file_name
-    small_real_file = Image.open(file_save_name)
-    small_real_file.save(small_file_save_name, optimize=True, quality=20)
-    client.put_object_from_local_file(
-        Bucket='small-img-1259115987',
-        LocalFilePath=small_file_save_name,
-        Key=small_file_save_name
-    )
-
-    os.remove(file_save_name)
-    os.remove(small_file_save_name)
-
+    with Image.open(real_file) as small_real_file:
+        small_real_file.save(small_file_save_name, optimize=True, quality=20)
+        client.put_object_from_local_file(
+            Bucket='small-img-1259115987',
+            LocalFilePath=small_file_save_name,
+            Key=small_file_save_name
+        )
+        os.remove(small_file_save_name)
     return "操作成功", '文件上传成功'
 
 

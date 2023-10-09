@@ -25,5 +25,5 @@ app.config.from_object('config')
 
 
 if __name__ == '__main__':
-    app.run(host=sys.argv[1], port=sys.argv[2])
-    # app.run(host='localhost', port=5000)
+    # app.run(host=sys.argv[1], port=sys.argv[2])
+    app.run(host='localhost', port=5000)
