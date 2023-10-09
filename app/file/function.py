@@ -24,6 +24,7 @@ print(response)
 
 # 新增
 def create_func(real_file, **kwargs):
+    print(real_file.content_length)
     file_name = real_file.filename
     file = File.create(file_name=file_name, **kwargs)
     file_save_name = file.id + '_' + file_name
