@@ -1,51 +1,50 @@
 import json
 
 from flask import request
-import app.focus.function as FocusFuncs
-from app.focus import focus
+import application.activity.function as ActivityFuncs
+from application.activity import activity
 import service.reponse as MyResponse
 from service.login import token_required
 
-# 点赞/收藏
-@focus.route('/add', methods=['POST'])
+
+@activity.route('/add', methods=['POST'])
 @token_required
 def add():
     requestData = json.loads(request.data)
     create_by = request.token_info['id']
-    msg, data = FocusFuncs.create_func(create_by=create_by,**requestData)
+    msg, data = ActivityFuncs.create_func(create_by=create_by,**requestData)
     return MyResponse.make_succ_response(msg=msg, data=data)
 
 
-@focus.route('/update', methods=['POST'])
+@activity.route('/update', methods=['POST'])
 @token_required
 def update():
     requestData = json.loads(request.data)
-    msg, data = FocusFuncs.update_func(**requestData)
+    msg, data = ActivityFuncs.update_func(**requestData)
     return MyResponse.make_succ_response(msg=msg, data=data)
 
 
-@focus.route('/delete', methods=['POST'])
+@activity.route('/delete', methods=['POST'])
 @token_required
 def delete():
     requestData = json.loads(request.data)
-    msg, data = FocusFuncs.delete_func(**requestData)
+    msg, data = ActivityFuncs.delete_func(**requestData)
     return MyResponse.make_succ_response(msg=msg, data=data)
 
 
-@focus.route('/info', methods=['POST'])
+@activity.route('/info', methods=['POST'])
 @token_required
 def info():
     requestData = json.loads(request.data)
-    msg, data = FocusFuncs.getinfo_func(**requestData)
+    msg, data = ActivityFuncs.getinfo_func(**requestData)
     return MyResponse.make_succ_response(msg=msg, data=data)
 
 
 
-@focus.route('/list', methods=['POST'])
+@activity.route('/list', methods=['POST'])
 @token_required
 def list():
-    print(request.token_info)
     requestData = json.loads(request.data)
-    msg, data = FocusFuncs.getlist_func(**requestData)
+    msg, data = ActivityFuncs.getlist_func(**requestData)
     print(msg,data)
     return MyResponse.make_succ_response(msg=msg, data=data)

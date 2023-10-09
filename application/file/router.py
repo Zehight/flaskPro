@@ -1,8 +1,8 @@
 import json
 import os
 from flask import request, send_from_directory, current_app,Response
-import app.file.function as FileFuncs
-from app.file import file
+import application.file.function as FileFuncs
+from application.file import file
 import service.reponse as MyResponse
 from service.login import token_required
 

@@ -1,0 +1,1 @@
+gunicorn application:app -b 0.0.0.0:9000 --log-level=debug
