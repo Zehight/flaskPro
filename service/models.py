@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
-from run import db
 from service.default_dao import CRUDMixin
+from run import db
 
 class Dept(db.Model,CRUDMixin):
     __tablename__ = 'dept'

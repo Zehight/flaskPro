@@ -14,9 +14,9 @@ FROM alpine:3.13
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositories \
 # 安装python3
 && apk add --update --no-cache python3 py3-pip \
-&& rm -rf /var/cache/apk/*
-
-
+&& rm -rf /var/cache/apk/* \
+&& mkdir -p /var/lang/python37/bin \
+&& ln -s /usr/bin/python3 /var/lang/python37/bin/python3
 
 # 拷贝当前项目到/app目录下（.dockerignore中文件除外）
 COPY . /app
@@ -41,5 +41,4 @@ EXPOSE 9000
 # 执行启动命令
 # 写多行独立的CMD命令是错误写法！只有最后一行CMD命令会被执行，之前的都会被忽略，导致业务报错。
 # 请参考[Docker官方文档之CMD命令](https://docs.docker.com/engine/reference/builder/#cmd)
-# ENTRYPOINT ["gunicorn", "-b", "0.0.0.0:9000",  "run:app"]
 ENTRYPOINT ["sh","-c","/bin/sh start.sh"]

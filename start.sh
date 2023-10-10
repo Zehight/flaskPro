@@ -1,1 +1,1 @@
-gunicorn application:app -b 0.0.0.0:9000 --log-level=debug
+/var/lang/python37/bin/python3 -u run.py
